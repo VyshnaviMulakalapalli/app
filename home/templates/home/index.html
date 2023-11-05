@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/search/" method="get">
+    <form action="/search/" method="get" class="row g-3">
+        <select class="form-select" name="type" class="col-auto">
+            <option value="moive">Movie</option>
+            <option value="tv">Tv Show</optipn>
+
+        </select>
         <div>
             <input type="text" class="form-control" placeholder="Search Query" name="q">
         </div>
