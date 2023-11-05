@@ -1,13 +1,13 @@
 from django.shortcuts import render
 import requests
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 
 TMDB_API_KEY = "1f00b3f0d90a5ef0e263f5d2a04c4ac9"
 
 def search(request):
 
     query = request.GET.get('q')
-    print(query)
+    
 
     results = []
     if query:
@@ -24,3 +24,8 @@ def search(request):
 
 def index(request):
     return render(request, 'home/index.html')
+
+def view_tv_detail(request, id):
+    data = requests.get(f"https://api.themoviedb.org/3/tv/{id}?api_key={TMDB_API_KEY}&")
+
+    return JsonResponse(data.json())
