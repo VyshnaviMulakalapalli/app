@@ -25,7 +25,8 @@ def search(request):
 def index(request):
     return render(request, 'home/index.html')
 
-def view_tv_detail(request, id):
-    data = requests.get(f"https://api.themoviedb.org/3/tv/{id}?api_key={TMDB_API_KEY}&")
-
-    return JsonResponse(data.json())
+def view_tv_detail(request, tv_id):
+    data = requests.get(f"https://api.themoviedb.org/3/tv/{tv_id}?api_key={TMDB_API_KEY}&language=en-US")
+    return render(request, "home/tv_detail.html", {
+        "data": data.json()
+    })
