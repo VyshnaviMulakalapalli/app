@@ -11,7 +11,7 @@ def search(request):
 
     results = []
     if query:
-        data = requests.get(f"https://api.themoviedb.org/3/search/tv?api_key={TMDB_API_KEY}&language=en-US&page=1&include_adult=false&query={query}")
+        data = requests.get(f"https://api.themoviedb.org/3/search/{request.GET.get('type')}?api_key={TMDB_API_KEY}&language=en-US&page=1&include_adult=false&query={query}")
 
     else:
         return HttpResponse("Please enter a search query")
@@ -28,5 +28,11 @@ def index(request):
 def view_tv_detail(request, tv_id):
     data = requests.get(f"https://api.themoviedb.org/3/tv/{tv_id}?api_key={TMDB_API_KEY}&language=en-US")
     return render(request, "home/tv_detail.html", {
+        "data": data.json()
+    })
+
+def view_movie_detail(request, movie_id):
+    data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_API_KEY}&language=en-US")
+    return render(request, "home/movie_detail.html", {
         "data": data.json()
     })
