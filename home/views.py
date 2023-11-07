@@ -42,3 +42,10 @@ def view_movie_detail(request, movie_id):
         "recommendations": recommendations.json(),
         "type": "movie"
     })
+
+def view_trendings_results(request):
+    type = request.GET.get("media_type")
+    time_window = request.GET.get("time_window")
+
+    trendings = requests.get(f"https://api.themoviedb.org/3/trending/{type}/{time_window}?api_key={TMDB_API_KEY}&language=en-US")
+    return JsonResponse(trendings.json())
