@@ -27,12 +27,25 @@ def index(request):
 
 def view_tv_detail(request, tv_id):
     data = requests.get(f"https://api.themoviedb.org/3/tv/{tv_id}?api_key={TMDB_API_KEY}&language=en-US")
+    recommendations = requests.get(f"https://api.themoviedb.org/3/tv/{tv_id}/recommendations?api_key={TMDB_API_KEY}&language=en-US")
     return render(request, "home/tv_detail.html", {
-        "data": data.json()
+        "data": data.json(),
+        "recommendations": recommendations.json(),
+        "type": "tv"
     })
 
 def view_movie_detail(request, movie_id):
     data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_API_KEY}&language=en-US")
+    recommendations = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}/recommendations?api_key={TMDB_API_KEY}&language=en-US")
     return render(request, "home/movie_detail.html", {
-        "data": data.json()
+        "data": data.json(),
+        "recommendations": recommendations.json(),
+        "type": "movie"
     })
+
+def view_trendings_results(request):
+    type = request.GET.get("media_type")
+    time_window = request.GET.get("time_window")
+
+    trendings = requests.get(f"https://api.themoviedb.org/3/trending/{type}/{time_window}?api_key={TMDB_API_KEY}&language=en-US")
+    return JsonResponse(trendings.json())
