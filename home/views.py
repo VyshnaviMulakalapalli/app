@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from .models import Comment
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
 import requests
 from django.http import HttpResponse,JsonResponse
 
@@ -49,3 +51,22 @@ def view_trendings_results(request):
 
     trendings = requests.get(f"https://api.themoviedb.org/3/trending/{type}/{time_window}?api_key={TMDB_API_KEY}&language=en-US")
     return JsonResponse(trendings.json())
+
+def comment_page(request, movie_id):
+    if request.method == "POST":
+        user = request.user
+        comment = request.POST.get("comment")
+
+        if not request.user.is_authenticated:
+            user = User.objects.get(id=1)
+
+        Comment(comment=comment, user=user, movie_id=movie_id).save()
+
+        return redirect(f"/movie/{movie_id}/comments/")
+        
+    else:
+        data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_API_KEY}&language=en-US")
+        title = data.json()["title"]
+        return render(request, "home/comments.html", {
+            "title": title
+        })
