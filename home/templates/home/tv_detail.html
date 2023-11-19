@@ -39,7 +39,7 @@
     <h2>Recommendations</h2>
     <div class="row">
         {% for m in recommendations.results %}
-            <div class="card" style="width: 18rem;">
+            <div class="card" style="width: 20rem;">
                 <img src="https://image.tmdb.org/t/p/w200{{ m.poster_path }}" class="card-img-top" alt="...">
                 <div class="card-body">
                 {% if not m.name %}
