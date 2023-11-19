@@ -5,19 +5,27 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/search/" method="get" class="row g-3">
-        <select class="form-select" name="type" class="col-auto">
-            <option value="movie">Movie</option>
-            <option value="tv">Tv Show</option>
-
-        </select>
-        <div class="col-auto">
-            <input type="text" class="form-control" placeholder="Search Query" name="q">
+    <style>
+        header {
+            font-family: 'Fairwater Script'; 
+        }
+        
+    </style>
+    <header class="navbar navbar-dark" style="background: url('https://img.freepik.com/free-vector/film-strip-with-light-effect-cinema-background_1017-38171.jpg') no-repeat center center fixed; background-size: cover; height: 250px; display: flex; justify-content: space-between; align-items: flex-start; padding: 20px;">
+        <div>
+            <a href="/" style="text-decoration: none; color: grey;">
+                <h1 style="font-size: 70px; font-weight: bold; margin: 0; color: grey;"><i>Movie App</i></h1>
+            </a>
         </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-    </form>
+        <form action="/search/" method="get" class="d-flex" style="align-items: flex-start; margin-right: 20px;">
+            <select class="form-select" name="type" style="width: 80px; height: 30px; margin-right: 10px; font-size: 12px; color: grey;">
+                <option value="movie">Movie</option>
+                <option value="tv">Tv Show</option>
+            </select>
+            <input type="text" class="form-control" placeholder="Search" name="q" style="height: 30px; width: 70%; max-width: 400px; color: grey;">
+            <button type="submit" class="btn btn-danger" style="height: 30px;">Go</button>
+        </form>
+    </header>
 
     <hr>
     <h2>Trending</h2>
@@ -53,7 +61,7 @@
                 for (let i=0; i<data.results.length; i++) {
                     var mainDiv = document.createElement("div");
                     mainDiv.setAttribute("class", "card");
-                    mainDiv.setAttribute("style", "width: 18rem;");
+                    mainDiv.setAttribute("style", "width: 20rem;");
                     var img = document.createElement("img");
                     img.setAttribute("src", "https://image.tmdb.org/t/p/w200" + data.results[i].poster_path);
                     img.setAttribute("class", "card-img-top");
