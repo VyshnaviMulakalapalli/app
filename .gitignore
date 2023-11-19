@@ -326,5 +326,5 @@ everycheese/media/
 # ignore sqlite databases
 *.db
 *.sqlite
-*.sqlite3
+
 
