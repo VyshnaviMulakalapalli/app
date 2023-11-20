@@ -36,6 +36,13 @@
         <h3>{{ n.name }}</h3>
         <img src="https://image.tmdb.org/t/p/w200/{{ n.logo_path }}" alt="...">
     {% endfor %}
+
+    <h2>Comments</h2>
+    
+    <a href="{% url 'comment_page2' tv_id=data.id %}">
+        <button class="btn btn-primary">View Comments</button>
+    </a> 
+      
     <hr>
     <h2>Genres</h2>
     <ul>
