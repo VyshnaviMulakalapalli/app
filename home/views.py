@@ -58,6 +58,7 @@ def view_trendings_results(request):
 
 
 def comment_page(request, movie_id):
+    print("View Called")
     if request.method == "POST":
         user = request.user
         comment = request.POST.get("comment")
@@ -67,7 +68,7 @@ def comment_page(request, movie_id):
 
         Comment(comment=comment, user=user, movie_id=movie_id).save()
 
-        return redirect(f"/movie/{movie_id}/comments/")
+        return redirect('comment_page', movie_id=movie_id)
 
     else:
         data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_API_KEY}&language=en-US")
@@ -79,3 +80,27 @@ def comment_page(request, movie_id):
             "title": title,
             "comments": comments,
         })
+    
+def comment_page2(request, tv_id):
+    print("View Called")
+    if request.method == "POST":
+        user = request.user
+        comment = request.POST.get("comment")
+
+        if not request.user.is_authenticated:
+            user = User.objects.get(id=1)
+
+        Comment(comment=comment, user=user, tv_id=tv_id).save()
+
+        return redirect('comment_page2', tv_id=tv_id)
+    else:
+        # GET request
+        data = requests.get(f"https://api.themoviedb.org/3/tv/{tv_id}?api_key={TMDB_API_KEY}&language=en-US")
+        title = data.json()["name"]
+
+        comments = reversed(Comment.objects.filter(tv_id=tv_id))
+
+        return render(request, "home/comments.html", {
+            "title": title,
+            "comments": comments,
+        })    
