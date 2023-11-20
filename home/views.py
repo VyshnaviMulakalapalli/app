@@ -14,9 +14,13 @@ def search(request):
     results = []
     if query:
         data = requests.get(f"https://api.themoviedb.org/3/search/{request.GET.get('type')}?api_key={TMDB_API_KEY}&language=en-US&page=1&include_adult=false&query={query}")
+        if not data.json().get('results'):
+            error_message = "Invalid search"
+            return render(request, 'home/results.html', {"error_message": error_message})
 
     else:
-        return HttpResponse("Please enter a search query")
+        error_message = "Please enter a search query"
+        return render(request, 'home/results.html', {"error_message": error_message})
     
     return render(request, 'home/results.html', {
         "data": data.json(),
