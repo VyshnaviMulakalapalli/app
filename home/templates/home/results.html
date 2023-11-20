@@ -27,6 +27,12 @@
     </form>
 </header>
 
+{% if error_message %}
+<div class="error-container" style="color: red; margin: 10px 0; font-size: 15px; position: absolute; top: 50px; right: 235px;">
+    {{ error_message }}
+</div>
+{% endif %}
+
 <hr>
 <div class="row">
     {% for m in data.results %}
