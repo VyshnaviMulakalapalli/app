@@ -7,3 +7,4 @@ class Comment(models.Model):
     movie_id = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    tv_id = models.IntegerField(blank=True, null=True)

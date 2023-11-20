@@ -79,6 +79,7 @@ def comment_page(request, movie_id):
         return render(request, "home/comments.html", {
             "title": title,
             "comments": comments,
+            "movie_id": movie_id,
         })
     
 def comment_page2(request, tv_id):
