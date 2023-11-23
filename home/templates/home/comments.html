@@ -6,24 +6,24 @@
 
 {% block main %}
     <h1>Comment page for {{ title }} </h1>
-    <form method="POST">
+    <form id="commentForm" method="POST">
         {% csrf_token %}
         <div class="form-group">
             <label for="comment">Comment:</label>
             <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary" id="submitComment">Submit</button>
     </form>
 
     {% for c in comments %}
-    <div>
-        {{ c.user }} on {{ c.created_at }} said: <br> {{ c.comment }}  
-    </div>
-    <br>     
+        <div>
+            {{ c.user }} on {{ c.created_at }} said: <br> {{ c.comment }}
+        </div>
+        <br>
     {% endfor %}
-    
-     <!-- Bootstrap Modal for comment confirmation -->
-     <div class="modal fade" id="commentConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="commentConfirmationModalLabel" aria-hidden="true">
+
+    <!-- Bootstrap Modal for comment confirmation -->
+    <div class="modal fade" id="commentConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="commentConfirmationModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -43,41 +43,50 @@
         </div>
     </div>
 
-   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Function to show the comment confirmation modal
-        function showConfirmationModal() {
-            $('#commentConfirmationModal').modal('show');
-        }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to show the comment confirmation modal
+            function showConfirmationModal() {
+                $('#commentConfirmationModal').modal('show');
+            }
 
-        // Function to fetch and update comments using AJAX
-        function fetchAndDisplayComments() {
-            fetch(`{% url 'comment_page' movie_id=movie_id %}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Update the comments container
-                    $('#commentsContainer').html('');
-                    data.comments.forEach(comment => {
-                        $('#commentsContainer').append(`
-                            <div>${comment.user} on ${comment.created_at} said: <br>${comment.comment}</div><br>
-                        `);
+            // Function to fetch and update comments using AJAX
+            function fetchAndDisplayComments() {
+                let url;
+                {% if movie_id %}
+                    url = `{% url 'comment_page' movie_id=movie_id %}`;
+                {% else %}
+                    url = `{% url 'comment_page2' tv_id=tv_id %}`;
+                {% endif %}
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the comments container
+                        $('#commentsContainer').html('');
+                        data.comments.forEach(comment => {
+                            $('#commentsContainer').append(`
+                                <div>${comment.user} on ${comment.created_at} said: <br>${comment.comment}</div><br>
+                            `);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching comments:', error);
                     });
-                })
-                .catch(error => {
-                    console.error('Error fetching comments:', error);
-                });
-        }
+            }
 
-        // Function to handle comment submission using AJAX
-        function submitComment() {
-            var formData = new FormData(document.getElementById('commentForm'));
-
-            // Show confirmation modal before submitting the comment
-            showConfirmationModal();
+            // Event listener for the Submit button
+            $('#submitComment').on('click', function () {
+                // Show confirmation modal before submitting the comment
+                showConfirmationModal();
+            });
 
             // Event listener for the Confirm button in the modal
             $('#confirmComment').on('click', function () {
-                fetch("{% url 'comment_page' movie_id=movie_id %}", {
+                // Submit the form when the confirmation is confirmed
+                var formData = new FormData(document.getElementById('commentForm'));
+
+                fetch("{% if movie_id %}{% url 'comment_page' movie_id=movie_id %}{% else %}{% url 'comment_page2' tv_id=tv_id %}{% endif %}", {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -85,24 +94,26 @@
                         'X-CSRFToken': formData.get('csrfmiddlewaretoken')
                     },
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Clear the form after successful submission
-                        document.getElementById('commentForm').reset();
+                .then(response => response.json())
+                .then(data => {
+                    // Clear the form after successful submission
+                    document.getElementById('commentForm').reset();
 
-                        // Fetch and display updated comments without reloading the page
-                        fetchAndDisplayComments();
-                    })
-                    .catch(error => {
-                        console.error('Error submitting comment:', error);
-                    });
+                    // Fetch and display updated comments without reloading the page
+                    fetchAndDisplayComments();
+                })
+                .catch(error => {
+                    console.error('Error submitting comment:', error);
+                })
+                .finally(function () {
+                    // Close the modal after handling the form submission
+                    $('#commentConfirmationModal').modal('hide');
+                });
             });
-        }
-
-        // Event listener for the Submit button
-        $('#submitComment').on('click', function () {
-            submitComment();
         });
-    });
-</script>
+    </script>
+
+    <!-- Include Bootstrap JS (make sure it is included in your project) -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
