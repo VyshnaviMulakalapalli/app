@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 import requests
 from django.http import HttpResponse,JsonResponse
+from django.contrib.auth.decorators import login_required
 
 TMDB_API_KEY = "1f00b3f0d90a5ef0e263f5d2a04c4ac9"
 
@@ -103,4 +104,9 @@ def comment_page2(request, tv_id):
             "title": title,
             "comments": comments,
             "tv_id": tv_id,
-        })    
+        })   
+
+
+@login_required
+def home(request):
+    return render(request, 'home/index.html')      
