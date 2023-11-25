@@ -1,0 +1,14 @@
+{% extends "home/base.html" %}
+
+{% block title %}Register{% endblock %}
+{% load bootstrap4 %}
+
+{% block main %}
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <br>
+        <button type="submit">Register</button>
+    </form>
+{% endblock %}
