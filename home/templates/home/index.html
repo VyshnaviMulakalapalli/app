@@ -17,23 +17,29 @@
                 <h1 style="font-size: 70px; font-weight: bold; margin: 0; color: grey;"><i>Movie App</i></h1>
             </a>
         </div>
-        <form action="/search/" method="get" class="d-flex" style="align-items: flex-start; margin-right: 20px;">
+        <form action="/search/" method="get" class="d-flex" style="align-items: flex-start; margin-left: -1050px; margin-top: 160px;">
             <select class="form-select" name="type" style="width: 80px; height: 30px; margin-right: 10px; font-size: 12px; color: grey;">
                 <option value="movie">Movie</option>
                 <option value="tv">Tv Show</option>
             </select>
-            <input type="text" class="form-control" placeholder="Search" name="q" style="height: 30px; width: 70%; max-width: 400px; color: grey;">
+            <input type="text" class="form-control" placeholder="Search" name="q" style="height: 30px; width: 180px; max-width: 400px; color: grey;">
             <button type="submit" class="btn btn-danger" style="height: 30px;">Go</button>
         </form>
+        {% if user.is_authenticated %}
+        <div style="color: white; font-size: 25px; margin-top: 10px;">
+            <i>Welcome, {{ user.username }}</i>
+            <br>
+            <br>
+            <br>
+            <br>
+            <a href="{% url 'logout' %}" style="color: white; margin-right: 0px; font-size: 16px; margin-top: 5px;">Logout</a>
+        </div>
+        {% else %}
+            <a href="{% url 'login' %}" style="color: white; margin-right: 150px; font-size: 16px;"><i>Login</i></a>
+        {% endif %}
     </header>
 
-    {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}">Logout</a>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>
-        {% endif %}
-
-    <hr>
+    <br>
     <h2>Trending</h2>
     <div class="input-group mb-3">
         <select class="form-select" id="media_type">
