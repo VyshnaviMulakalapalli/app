@@ -110,3 +110,4 @@ def comment_page2(request, tv_id):
 @login_required
 def home(request):
     return render(request, 'home/index.html')      
+
