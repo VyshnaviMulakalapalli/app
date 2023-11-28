@@ -73,7 +73,6 @@
                 $('#commentConfirmationModal').modal('show');
             }
 
-            // Function to fetch and update comments using AJAX
             function fetchAndDisplayComments() {
                 let url;
                 {% if movie_id %}
@@ -82,9 +81,13 @@
                     url = `{% url 'comment_page2' tv_id=tv_id %}`;
                 {% endif %}
 
+                console.log('Fetching comments from URL:', url);
+
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
+                        console.log('Received data:', data);
+
                         // Update the comments container
                         $('#commentsContainer').html('');
                         data.comments.forEach(comment => {
