@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 import requests
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
+from .models import WatchlistItem
+from django.contrib.auth.models import User
 
 TMDB_API_KEY = "1f00b3f0d90a5ef0e263f5d2a04c4ac9"
 
@@ -111,3 +113,32 @@ def comment_page2(request, tv_id):
 def home(request):
     return render(request, 'home/index.html')      
 
+
+def add_movie_to_watchlist(request, movie_id=None):
+    add_to_watchlist(request, movie_id=movie_id)
+    return redirect('home')
+
+def add_tv_to_watchlist(request, tv_id=None):
+    add_to_watchlist(request, tv_id=tv_id)
+    return redirect('home')
+
+def add_to_watchlist(request, movie_id=None, tv_id=None):
+    # Check if the item is already in the watchlist
+    existing_item = WatchlistItem.objects.filter(
+        user=request.user,
+        movie_id=movie_id,
+        tv_show_id=tv_id
+    ).first()
+
+    if not existing_item:
+        # If not, add it to the watchlist
+        watchlist_item = WatchlistItem(
+            user=request.user,
+            movie_id=movie_id,
+            tv_show_id=tv_id
+        )
+        watchlist_item.save()
+
+def watchlist(request):
+    watchlist_items = WatchlistItem.objects.filter(user=request.user)
+    return render(request, 'home/watchlist.html', {'watchlist_items': watchlist_items})        
