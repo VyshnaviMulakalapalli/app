@@ -1,0 +1,30 @@
+{% extends "home/base.html" %}
+{% load tmdb_filters %}
+
+{% block title %}Watchlist{% endblock %}
+
+{% block main %}
+    
+    <h2>Watchlist</h2>
+    {% for item in watchlist_items %}
+        <!-- Display watchlist items with movie or TV show names -->
+        {% if item.movie_id %}
+            {% with movie_data=item.movie_id|tmdb_movie_url %}
+                {% if movie_data.title %}
+                    {{ movie_data.title }}
+                {% else %}
+                    Movie Title Not Found
+                {% endif %}
+            {% endwith %}
+        {% elif item.tv_show_id %}
+            {% with tv_data=item.tv_show_id|tmdb_tv_url %}
+                {% if tv_data.name %}
+                    {{ tv_data.name }}
+                {% else %}
+                    TV Show Name Not Found
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+        <br>
+    {% endfor %}
+{% endblock %}

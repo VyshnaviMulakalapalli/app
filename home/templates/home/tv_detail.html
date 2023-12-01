@@ -42,6 +42,14 @@
     <a href="{% url 'comment_page2' tv_id=data.id %}">
         <button class="btn btn-primary">View Comments</button>
     </a> 
+    <!-- home/templates/home/tv_details.html -->
+    {% if user.is_authenticated %}
+    <a href="{% url 'add_tv_to_watchlist' tv_id=data.id %}">
+        <button class="btn btn-primary">Add to Watchlist</button>
+    </a>
+    </div>
+
+    {% endif %}
       
     <hr>
     <h2>Genres</h2>

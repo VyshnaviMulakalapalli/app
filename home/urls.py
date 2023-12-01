@@ -2,6 +2,8 @@ from django.urls import path
 
 from .api_views import CommentAPIViewMovie, CommentAPIViewTV
 from . import views
+from .views import home
+from .views import  watchlist
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -13,4 +15,9 @@ urlpatterns = [
     path("tv/<int:tv_id>/comments.html", views.comment_page2, name="comment_page2"),
     path('movie/<int:movie_id>/comments/api', CommentAPIViewMovie.as_view(), name='movie_comments_api'),
     path('tv/<int:tv_id>/comments/api', CommentAPIViewTV.as_view(), name='tv_comments_api'),
+    path('',home, name='home'),
+    path('add_movie_to_watchlist/<int:movie_id>/', views.add_movie_to_watchlist, name='add_movie_to_watchlist'),
+    path('add_tv_to_watchlist/<int:tv_id>/', views.add_tv_to_watchlist, name='add_tv_to_watchlist'),
+    path('watchlist/', watchlist, name='watchlist'),
+    
 ]
