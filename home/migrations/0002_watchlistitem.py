@@ -7,22 +7,18 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    initial = True
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('home', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Comment',
+            name='WatchlistItem',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('comment', models.TextField()),
-                ('movie_id', models.IntegerField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('tv_id', models.IntegerField(blank=True, null=True)),
+                ('movie_id', models.IntegerField(null=True)),
+                ('tv_show_id', models.IntegerField(null=True)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
