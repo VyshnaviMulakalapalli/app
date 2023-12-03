@@ -1,6 +1,6 @@
 from .models import Comment
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 import requests
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -141,4 +141,13 @@ def add_to_watchlist(request, movie_id=None, tv_id=None):
 
 def watchlist(request):
     watchlist_items = WatchlistItem.objects.filter(user=request.user)
-    return render(request, 'home/watchlist.html', {'watchlist_items': watchlist_items})        
+    return render(request, 'home/watchlist.html', {'watchlist_items': watchlist_items})    
+
+def remove_from_watchlist(request, item_id):
+    watchlist_item = get_object_or_404(WatchlistItem, id=item_id)
+
+    if watchlist_item.user == request.user:
+        watchlist_item.delete()
+        return redirect('watchlist')
+
+    return JsonResponse({'error': 'Forbidden'}, status=403)    
